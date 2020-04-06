@@ -1,0 +1,537 @@
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ShowAllProduct 2</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" />
+
+    <style>
+        .carousel-multi-item .carousel-indicators li {
+            width: 1.25rem;
+            max-width: 1.25rem;
+            height: 1.25rem;
+            margin-bottom: -3.75rem;
+            background-color: #4285f4;
+        }
+
+        .carousel-indicators {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 15;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-pack: center;
+            justify-content: center;
+            padding-left: 0;
+            margin-right: 15%;
+            margin-left: 15%;
+            list-style: none;
+        }
+
+        .card-body {
+            padding: 12px;
+        }
+
+        @media (min-width: 992px) and (max-width: 1200px) {
+            /* Show 6th slide on md if col-md-4*/
+            .carousel-inner .active.col-lg-3.carousel-item + .carousel-item + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
+                position: absolute;
+                top: 0;
+                right: -25%;
+                /*change this with javascript in the future*/
+                z-index: -1;
+                display: block;
+                visibility: visible;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 992px) {
+            /* Show 4th slide on md if col-md-4*/
+            .carousel-inner .active.col-md-4.carousel-item + .carousel-item + .carousel-item + .carousel-item {
+                position: absolute;
+                top: 0;
+                right: -33.3333%;
+                /*change this with javascript in the future*/
+                z-index: -1;
+                display: block;
+                visibility: visible;
+            }
+        }
+
+        @media (min-width: 576px) and (max-width: 768px) {
+            /* Show 3rd slide on sm if col-sm-6*/
+            .carousel-inner .active.col-sm-6.carousel-item + .carousel-item + .carousel-item {
+                position: absolute;
+                top: 0;
+                right: -50%;
+                /*change this with javascript in the future*/
+                z-index: -1;
+                display: block;
+                visibility: visible;
+            }
+        }
+
+        @media (min-width: 576px) {
+            .carousel-item {
+                margin-right: 0;
+            }
+            /* show 2 items */
+            .carousel-inner .active + .carousel-item {
+                display: block;
+            }
+
+            .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left),
+            .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item {
+                transition: none;
+            }
+
+            .carousel-inner .carousel-item-next {
+                position: relative;
+                transform: translate3d(0, 0, 0);
+            }
+            /* left or forward direction */
+            .active.carousel-item-left + .carousel-item-next.carousel-item-left,
+            .carousel-item-next.carousel-item-left + .carousel-item,
+            .carousel-item-next.carousel-item-left + .carousel-item + .carousel-item {
+                position: relative;
+                transform: translate3d(-100%, 0, 0);
+                visibility: visible;
+            }
+            /* farthest right hidden item must be also positioned for animations */
+            .carousel-inner .carousel-item-prev.carousel-item-right {
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: -1;
+                display: block;
+                visibility: visible;
+            }
+            /* right or prev direction */
+            .active.carousel-item-right + .carousel-item-prev.carousel-item-right,
+            .carousel-item-prev.carousel-item-right + .carousel-item,
+            .carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item {
+                position: relative;
+                transform: translate3d(100%, 0, 0);
+                visibility: visible;
+                display: block;
+                visibility: visible;
+            }
+        }
+
+        /* MD */
+        @media (min-width: 768px) {
+            /* show 3rd of 3 item slide */
+            .carousel-inner .active + .carousel-item + .carousel-item {
+                display: block;
+            }
+
+            .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item + .carousel-item {
+                transition: none;
+            }
+
+            .carousel-inner .carousel-item-next {
+                position: relative;
+                transform: translate3d(0, 0, 0);
+            }
+            /* left or forward direction */
+            .carousel-item-next.carousel-item-left + .carousel-item + .carousel-item + .carousel-item {
+                position: relative;
+                transform: translate3d(-100%, 0, 0);
+                visibility: visible;
+            }
+            /* right or prev direction */
+            .carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item + .carousel-item {
+                position: relative;
+                transform: translate3d(100%, 0, 0);
+                visibility: visible;
+                display: block;
+                visibility: visible;
+            }
+        }
+
+        /* LG */
+        @media (min-width: 991px) {
+            /* show 4th item */
+            .carousel-inner .active + .carousel-item + .carousel-item + .carousel-item {
+                display: block;
+            }
+
+            .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item + .carousel-item + .carousel-item {
+                transition: none;
+            }
+            /* Show 5th slide on lg if col-lg-3 */
+            .carousel-inner .active.col-lg-3.carousel-item + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
+                position: absolute;
+                top: 0;
+                right: -25%;
+                /*change this with javascript in the future*/
+                z-index: -1;
+                display: block;
+                visibility: visible;
+            }
+            /* left or forward direction */
+            .carousel-item-next.carousel-item-left + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
+                position: relative;
+                transform: translate3d(-100%, 0, 0);
+                visibility: visible;
+            }
+            /* right or prev direction //t - previous slide direction last item animation fix */
+            .carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
+                position: relative;
+                transform: translate3d(100%, 0, 0);
+                visibility: visible;
+                display: block;
+                visibility: visible;
+            }
+        }
+
+        /* XL */
+        @media (min-width: 1200px) {
+            /* show 6th item */
+            .carousel-inner .active + .carousel-item + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
+                display: block;
+            }
+
+            .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
+                transition: none;
+            }
+            /* Show 7th slide on xl if col-xl-2 */
+            .carousel-inner .active.col-xl-2.carousel-item + .carousel-item + .carousel-item + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
+                position: absolute;
+                top: 0;
+                right: -16.66666%; /*change this with javascript in the future*/
+                z-index: -1;
+                display: block;
+                visibility: visible;
+            }
+            /* left or forward direction */
+            .carousel-item-next.carousel-item-left + .carousel-item + .carousel-item + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
+                position: relative;
+                transform: translate3d(-100%, 0, 0);
+                visibility: visible;
+            }
+            /* right or prev direction //t - previous slide direction last item animation fix */
+            .carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
+                position: relative;
+                transform: translate3d(100%, 0, 0);
+                visibility: visible;
+                display: block;
+                visibility: visible;
+            }
+        }
+    </style>
+    
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/umd/popper.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+</head>
+
+<body>
+    <div id="horizontal_product_container"> </div>
+    <div id="horizontal_product_container2"> </div>
+
+    <script>
+        class ProductGroup {
+            constructor(target, data, itemsPerSlide = 6, arrangement = "horizontal") {
+                console.log(target, data, itemsPerSlide, arrangement);
+                if (!target || !data) {
+                    throw new Error("Target and data are required.");
+                }
+
+                if (!$(target).length) {
+                    throw new Error("Target is invalid.");
+                }
+
+                this.target = target;
+                this.data = data;
+                this.itemsPerSlide = itemsPerSlide;
+                this.arrangement = arrangement;
+            }
+
+            start() {
+                $(this.target).empty();
+
+                let containerDiv = $("<div>").attr("class", "container-fluid");
+                let innerDiv = $("<div>").attr("class", "row justify-content-center");
+
+                if (this.arrangement === "horizontal") {
+                    let carouselId = this.data.product_category_title.toLowerCase().trim().replace(" ", "_") + "_carousel_" + ($(".carousel").length + 1);
+
+                    let carouselDiv = $("<div>").attr({
+                        "id": carouselId,
+                        "class": "carousel slide",
+                        "data-ride": "carousel"
+                    }).appendTo(containerDiv);
+
+                    let headDiv = $("<div>").attr("class", "d-flex justify-content-between m-3").appendTo(carouselDiv);
+                    headDiv.append(
+                        `<div>
+                                    <span class="h4">${this.data.product_category_title}</span>
+                                    <span><a href="${this.data.seealllink}" class="h5 text-secondary pl-3">See All <i class="fa fa-arrow-right"></i></a></span>
+                                </div>`
+                    );
+
+                    let prevSlideAnchor = $("<a>")
+                        .append('<i class="fa fa-angle-double-left"></i>')
+                        .attr({
+                            "href": "#" + carouselId,
+                            "class": "btn btn-outline-primary rounded-circle",
+                            "data-slide": "prev"
+                        });
+
+                    let nextSlideAnchor = $("<a>")
+                        .append('<i class="fa fa-angle-double-right"></i>')
+                        .attr({
+                            "href": "#" + carouselId,
+                            "class": "btn btn-outline-primary rounded-circle ml-2",
+                            "data-slide": "next"
+                        });
+
+                    headDiv.append($("<div>").append(prevSlideAnchor, nextSlideAnchor));
+
+                    innerDiv.attr("role", "listbox");
+                    innerDiv.addClass("carousel-inner w-100 mx-auto");
+                    innerDiv.appendTo(carouselDiv);
+
+                    let itemsPerSlide = this.itemsPerSlide;
+
+                    (function ($) {
+                        carouselDiv.on("slide.bs.carousel", function (e) {
+                            let index = $(e.relatedTarget).index();
+                            let totalItems = innerDiv.find(".carousel-item").length;
+                            console.log("itemsPerSlide", itemsPerSlide);
+                            if (index >= totalItems - (itemsPerSlide - 1)) {
+                                let it = itemsPerSlide - (totalItems - index);
+                                for (let i = 0; i < it; i++) {
+                                    (e.direction == "left") ?
+                                        innerDiv.find(".carousel-item").eq(i).appendTo(innerDiv) : innerDiv.find(".carousel-item").eq(0).appendTo(innerDiv);
+                                }
+                            }
+                        });
+                    })(jQuery);
+                } else if (this.arrangement === "grid") {
+                    containerDiv.append(
+                        `<div class="row">
+                                    <div class="col-md-12">
+                                        <div class="card mb-3">
+                                            <div class="card-body bg-transparent p-1">
+                                                <h3 class="text-center">${this.data.product_category_title}</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`
+                    );
+
+                    innerDiv.appendTo(containerDiv);
+                }
+
+                let arrangement = this.arrangement;
+
+                $.each(this.data.products, function (key, value) {
+                    let carouselItem = $("<div>")
+                        .attr({
+                            "class": `${arrangement === "horizontal" ? "carousel-item" : ""}
+                                                ${(key == 0 && arrangement === "horizontal") ? "active" : ""}`,
+                            "style": "width:" + "220" + "px; margin:0px 5px;"
+                        }).appendTo(innerDiv);
+
+                    let card = $("<div>").attr("class", `card mb-2`).appendTo(carouselItem);
+                    card.append(`<img class="card-img-top" src="${value.imagesrc}" height="160" />`);
+
+                    let cardBody = $("<div>").attr("class", `card-body`).appendTo(card);
+                    cardBody.append(`<h6 class="card-title" style="color:black; line-height:1.5em; min-height:3.0em; padding:0px; margin:0px;">${value.title}</h6>`);
+
+                    let div = $("<div>").attr("class", `d-flex justify-content-between`).appendTo(cardBody);
+
+                    div.append(
+                        `<div class="d-flex flex-column justify-content-between">
+                                    <div>
+                                        <span> <span>&#2547; </span> ${value.currentprice} </span>
+                                    </div>
+                                    <div style='font-size:12px; color:red;'>
+                                        <del> <span> <span>&#2547; </span> ${value.previousprice} </span> </del>
+                                    </div>
+
+                                </div>`
+                    );
+
+                    let buyNowButton = $("<button>")
+                        .attr("class", "btn btn-sm btn-outline-primary")
+                        .append("Buy Now")
+                        .appendTo($("<span>").appendTo(div));
+
+                    (function ($) {
+                        buyNowButton.on("click", function (e) {
+                            console.log("Buy " + value.title);
+                        });
+                    })(jQuery);
+                });
+				
+				if (this.arrangement === "grid") {
+                    let div = $("<div>").attr("class", "d-flex justify-content-center my-2").appendTo(containerDiv);
+
+                    var pagination1 = new CPagination(div, 21, 9, 3, printPageNo);
+                    pagination1.start();
+                }
+				
+                containerDiv.appendTo($(this.target));
+            }
+        };
+		
+		function printPageNo(pageNo) {
+            console.log(`You clicked ${pageNo}.`);
+        };
+
+        loadProductData();
+
+        function loadProductData() {
+            //$.ajax({
+            //    url: "",
+            //    type: "POST",
+            //    contentType: "application/json; charset-utf-8",
+            //    success: function (resp) {
+            //        if (resp.error) {
+            //            toastr.error(resp.message);
+            //        } else {
+
+            //        }
+            //    }
+            //});
+
+            let resp = {
+                "error": false,
+                "data": {
+                    "product_category_title": "New Arrival",
+                    "seealllink": "",
+                    "products": [{
+                        "title": "Product Title - 01",
+                        "imagesrc": "/Images/product/images/product 01.jpg",
+                        "previousprice": "62000",
+                        "currentprice": "55000"
+                    },
+                    {
+                        "title": "Product Title - 02",
+                        "imagesrc": "/Images/product/images/product 02.jpg",
+                        "previousprice": "62000",
+                        "currentprice": "55000"
+                    },
+                    {
+                        "title": "Product Title - 03",
+                        "imagesrc": "/Images/product/images/product 03.jpg",
+                        "previousprice": "32000",
+                        "currentprice": "23000"
+                    },
+                    {
+                        "title": "Product Title - 04",
+                        "imagesrc": "/Images/product/images/product 04.jpg",
+                        "previousprice": "542000",
+                        "currentprice": "525000"
+                    },
+                    {
+                        "title": "Product Title - 05",
+                        "imagesrc": "/Images/product/images/product 05.jpg",
+                        "previousprice": "62000",
+                        "currentprice": "55000"
+                    },
+                    {
+                        "title": "Product Title - 06",
+                        "imagesrc": "/Images/product/images/product 06.jpg",
+                        "previousprice": "62000",
+                        "currentprice": "55000"
+                    },
+                    {
+                        "title": "Product Title - 07",
+                        "imagesrc": "/Images/product/images/product 07.jpg",
+                        "previousprice": "6000",
+                        "currentprice": "5000"
+                    },
+                    {
+                        "title": "Product Title - 08",
+                        "imagesrc": "/Images/product/images/product 08.jpg",
+                        "previousprice": "62000",
+                        "currentprice": "55000"
+                    },
+                    {
+                        "title": "Product Title - 09",
+                        "imagesrc": "/Images/product/images/product 09.jpg",
+                        "previousprice": "62000",
+                        "currentprice": "55000"
+                    },
+                    {
+                        "title": "Product Title - 10",
+                        "imagesrc": "/Images/product/images/product 10.jpg",
+                        "previousprice": "162000",
+                        "currentprice": "155000"
+                    },
+                    {
+                        "title": "Product Title - 11",
+                        "imagesrc": "/Images/product/images/product 11.jpg",
+                        "previousprice": "62000",
+                        "currentprice": "55000"
+                    },
+                    {
+                        "title": "Product Title - 12",
+                        "imagesrc": "/Images/product/images/product 12.jpg",
+                        "previousprice": "62000",
+                        "currentprice": "55000"
+                    },
+                    {
+                        "title": "Product Title - 13",
+                        "imagesrc": "/Images/product/images/product 13.jpg",
+                        "previousprice": "162000",
+                        "currentprice": "155000"
+                    },
+                    {
+                        "title": "Product Title - 14",
+                        "imagesrc": "/Images/product/images/product 14.jpg",
+                        "previousprice": "18299",
+                        "currentprice": "15999"
+                    },
+                    {
+                        "title": "Product Title - 15 mnshsedoiv",
+                        "imagesrc": "/Images/product/images/product 15.jpg",
+                        "previousprice": "62000",
+                        "currentprice": "55000"
+                    },
+                    {
+                        "title": "Product Title - 16 mnsdoiv",
+                        "imagesrc": "/Images/product/images/product 16.jpg",
+                        "previousprice": "123456",
+                        "currentprice": "112233"
+                    }
+                    ]
+                }
+            };
+
+            //showProductData(resp.data);
+
+            let productGroup1 = new ProductGroup("#horizontal_product_container", resp.data);
+            console.log(productGroup1);
+            productGroup1.start();
+
+            let productGroup2 = new ProductGroup("#horizontal_product_container2", resp.data, 6, "grid");
+            console.log(productGroup2);
+            productGroup2.start();
+
+            $('img').on("error", function () {
+                $(this).attr("src", "//homestaymatch.com/images/no-image-available.png");
+            });
+        };
+
+    </script>
+</body>
+
+</html>
